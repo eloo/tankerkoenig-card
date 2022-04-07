@@ -2,7 +2,6 @@ import {
     LitElement,
     html,
     css,
-    property
 } from "https://unpkg.com/lit-element@2.3.1/lit-element.js?module";
 
 class TankerkoenigCard extends LitElement {
@@ -50,7 +49,7 @@ class TankerkoenigCard extends LitElement {
                 <table width="100%">
                     ${this.stations.map((station) => {
                     
-                        if(!this.isOpen(station) && this.config.show_closed !== true) return;
+                        // if(!this.isOpen(station) && this.config.show_closed !== true) return;
                     
                         return html`<tr>
                         
@@ -82,16 +81,6 @@ class TankerkoenigCard extends LitElement {
         return state;
     }
     
-    isOpen(station) {
-        const state = this.getStationState(station);
-        
-        if(state && state.attributes.is_open) {
-            return true;
-        }
-        
-        return false;
-    }
-    
     renderPrice(station, type) {
         if(!this.has[type]) {
             return;
@@ -99,7 +88,8 @@ class TankerkoenigCard extends LitElement {
         
         const state = this.hass.states[station[type]] || null;
             
-        if(state && state.state != 'unknown' && state.state != 'unavailable' && this.isOpen(station)) {
+        if(state && state.state != 'unknown' && state.state != 'unavailable') {
+        // if(state && state.state != 'unknown' && state.state != 'unavailable' && this.isOpen(station)) {
             return html`<td><ha-label-badge
               label="${type.toUpperCase()}"
               @click="${() => this.fireEvent('hass-more-info', station[type])}"
